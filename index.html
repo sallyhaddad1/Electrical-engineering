@@ -1,0 +1,1903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electrical engineering session </title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+   <style>
+       .youtube-button {
+    /* تنسيق لجعله زرًا */
+    display: inline-block;
+    padding: 10px 20px;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 8px; /* حواف مستديرة */
+    cursor: pointer;
+    
+    /* ألوان يوتيوب */
+    background-color: #ff0000; /* أحمر يوتيوب */
+    color: #ffffff; /* نص أبيض */
+    border: none;
+    
+    /* تأثير عند المرور */
+    transition: background-color 0.3s ease;
+}
+
+.youtube-button:hover {
+    background-color: #cc0000;
+}
+        body {
+            font-family: 'Inter', 'Tajawal', sans-serif; 
+            background-color: #f1f5f9; 
+            overscroll-behavior: none;
+            margin: 0;
+        }
+        .slide {
+            display: none;
+            animation: fadeIn 0.4s ease-in-out;
+            height: 100%;
+            overflow: hidden;
+        }
+		
+        .slide-visible {
+            display: block;
+        }
+        .slide-hidden {
+            display: none !important;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .quiz-option {
+            transition: all 0.2s ease;
+        }
+        .quiz-option.correct {
+            background-color: #d1fae5 !important;
+            border-color: #10b981 !important;
+            color: #065f46 !important;
+            font-weight: 600;
+        }
+        .quiz-option.incorrect {
+            background-color: #fee2e2 !important;
+            border-color: #ef4444 !important;
+            color: #991b1b !important;
+            font-weight: 600;
+        }
+        .quiz-option:disabled:not(.correct):not(.incorrect) {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .quiz-option:disabled {
+            cursor: not-allowed;
+        }
+        .slide-content-wrapper {
+            height: calc(100% - 4rem - 1px);
+            overflow-y: auto;
+            padding-bottom: 2rem;
+        }
+        .slide-content-wrapper::-webkit-scrollbar { width: 8px; }
+        .slide-content-wrapper::-webkit-scrollbar-track { background: #e2e8f0; border-radius: 10px; }
+        .slide-content-wrapper::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 10px; }
+        .slide-content-wrapper::-webkit-scrollbar-thumb:hover { background: #1d4ed8; }
+        #video-modal-content { width: 90%; max-width: 900px; }
+        #youtube-iframe { aspect-ratio: 16 / 9; width: 100%; height: auto; }
+        .slide-header {
+            position: sticky;
+            top: 0;
+            background-color: rgba(241, 245, 249, 0.95);
+            backdrop-filter: blur(5px);
+            padding-top: 0.25rem;
+            padding-bottom: 0.75rem;
+            z-index: 5;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        /* Placeholder style for missing images */
+        img.placeholder-image {
+            background-color: #e2e8f0;
+            border: 2px dashed #94a3b8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #64748b;
+            font-weight: bold;
+            text-align: center;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            position: relative;
+            /* توسيط المحتوى داخل body الجديد */
+            margin: 50px auto; 
+        }
+
+        .content-wrapper {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 50px;
+        }
+
+        .training-card {
+            background-color: #0d1b3f;
+            color: white;
+            padding: 20px;
+            border-radius: 20px;
+            width: 48%;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            min-height: 450px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            padding-top: 100px;
+        }
+
+        .card-header {
+            position: absolute;
+            top: -50px;
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .image-placeholder {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: white;
+            border: 5px solid #ab141c;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .image-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            opacity: 1; 
+        }
+
+        .list {
+            list-style: none;
+            padding: 0;
+            margin-top: 40px;
+            text-align: right;
+            font-size: 1.1em;
+            width: 100%;
+            padding-right: 20px;
+        }
+
+        .list li {
+            margin-bottom: 15px;
+        }
+
+        .timeline-bar {
+            position: absolute;
+            bottom: -50px;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background-color: #ab141c;
+            z-index: 10;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 5px;
+        }
+
+        .timeline-text {
+            color: white;
+            font-weight: bold;
+            padding: 0 20px;
+            text-transform: uppercase;
+            font-size: 1.2em;
+            position: relative;
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        .left-arrow::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -20px;
+            width: 0;
+            height: 0;
+            border-top: 20px solid transparent;
+            border-bottom: 20px solid transparent;
+            border-right: 20px solid #ab141c;
+        }
+
+        .right-arrow::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: -20px;
+            width: 0;
+            height: 0;
+            border-top: 20px solid transparent;
+            border-bottom: 20px solid transparent;
+            border-left: 20px solid #ab141c;
+        }
+    </style>
+</head>
+<body class="flex flex-col h-screen text-slate-800">
+
+    <!-- Header -->
+    <header class="bg-white shadow-md w-full p-4 z-10 flex justify-between items-center flex-shrink-0 border-b border-slate-200">
+        <div class="flex items-center min-w-0"> 
+            <div class="w-10 h-10 bg-blue-800 rounded-lg flex items-center justify-center flex-shrink-0 shadow-sm">
+                <!-- Icon representing Industrial Equipment -->
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a8 8 0 11-14.856 0M12 21a8 8 0 100-16 8 8 0 000 16z"></path></svg>
+            </div>
+            <div class="ml-3 truncate">
+                <h1 class="text-lg md:text-xl font-bold text-slate-900">Electrical engineering session </h1>
+            </div>
+        </div>
+        <div class="text-sm font-medium text-slate-500 flex-shrink-0 ml-2 bg-slate-100 px-3 py-1 rounded-full" id="slide-counter">Slide 1 / 18</div>
+    </header>
+
+    <!-- Main Slide Container -->
+    <main id="slide-container" class="flex-1 overflow-hidden p-4 md:p-8 lg:p-12 relative">
+        
+        <!-- Slide 0: Title -->
+        <section id="slide-0" class="slide slide-visible flex flex-col justify-center items-center text-center p-4">
+            <div class="bg-white p-10 md:p-16 rounded-2xl shadow-xl max-w-4xl w-full border-t-8 border-blue-800">
+                <span class="block text-sm font-bold text-blue-600 uppercase tracking-widest mb-2">Target Engineering Construction - National Emirates Training</span>
+                <h1 class="text-4xl md:text-6xl font-extrabold text-slate-900 mb-6">Electrical engineering session <br/></h1>
+                <div class="w-24 h-1 bg-yellow-500 mx-auto mb-8 rounded-full"></div>
+                <p class="text-xl text-slate-600 mb-8 max-w-2xl mx-auto">A comprehensive competency-based course on industrial stationary assets, from Heat Exchangers to Separation Columns.</p>
+                        <button id="start-btn" class="bg-blue-800 hover:bg-blue-900 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-transform transform hover:scale-105">
+    Start Course
+</button>
+            </div>
+        </section>
+
+        <!-- Slide 1: CONTENT -->
+        <section id="slide-1" class="slide">
+            <div class="slide-content-wrapper">
+                <div class="bg-white p-8 rounded-xl shadow-lg border border-slate-200">                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <!-- Session 1 Card -->
+                        <div class="bg-blue-50 p-6 rounded-xl border border-blue-100 hover:shadow-md transition-shadow">
+                            <ul class="space-y-3 text-slate-700 ml-14">
+                                <li class="flex items-start"><svg class="w-5 h-5 text-blue-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+How Electrical system vital for safe and reliable operation of plant
+</li>
+                                <li class="flex items-start"><svg class="w-5 h-5 text-blue-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+Various stages of Electrical system design during project execution
+
+</li>
+                                <li class="flex items-start"><svg class="w-5 h-5 text-blue-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+Development of basic Electrical distribution scheme and major equipments
+
+ </li>				
+								 
+                            </ul>
+                        </div>                       
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 2:  MANUFACTURING-->
+<section id="manufacturing-chart" class="slide">
+    <div class="slide-content-wrapper p-10">
+        <div class="bg-white p-8 rounded-xl shadow-lg border border-slate-200">
+
+            <div class="flex justify-center mb-8">
+                <div class="bg-green-700 text-white p-4 rounded-xl shadow-lg w-64 text-center text-xl font-bold">
+                    MANUFACTURING
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+
+                <div class="flex flex-col items-center">
+                    <div class="bg-green-600 text-white p-3 rounded-xl shadow-md w-64 text-center text-lg font-semibold">
+                        PROCESS
+                    </div>
+
+                    <div class="bg-pink-600 text-white p-3 mt-4 rounded-xl shadow-md w-64 text-center text-base">
+                        Oil & Gas, Petrochemicals, Pharmaceuticals, Etc.
+                    </div>
+
+                    <div class="flex mt-8 w-full justify-center gap-4">
+                        <div class="w-1/2 p-4 bg-green-50 border border-green-200 rounded-xl shadow-inner">
+                            <h3 class="text-sm font-bold text-green-800 mb-3 text-center border-b pb-2">MAJOR DESIGN DISCIPLINES IN PROCESS INDUSTRY
+</h3>
+                            <ul class="space-y-2">
+                                <li class="bg-green-500 text-white p-2 rounded text-sm text-center">Process</li>
+                                <li class="bg-green-500 text-white p-2 rounded text-sm text-center">Mechanical (Rotating & Static)</li>
+                                <li class="bg-green-500 text-white p-2 rounded text-sm text-center">Piping</li>
+                                <li class="bg-green-500 text-white p-2 rounded text-sm text-center">Electrical</li>
+                                <li class="bg-green-500 text-white p-2 rounded text-sm text-center">Instrumentation</li>
+                                <li class="bg-green-500 text-white p-2 rounded text-sm text-center">Civil</li>
+                                <li class="bg-green-500 text-white p-2 rounded text-sm text-center">Fire Fighting & Safety</li>
+                            </ul>
+                        </div>
+
+                        <div class="w-1/2 p-4 bg-teal-500 text-white border border-teal-600 rounded-xl shadow-lg flex flex-col justify-between">
+                            <h3 class="text-sm font-bold mb-3 text-center border-b border-teal-300 pb-2">KEY CHARACTERISTICS</h3>
+                            <ul class="list-disc list-inside space-y-2 text-sm">
+                                <li>Centralized Equipment Control.</li>
+                                <li>Higher degree of automation (continuous production flow).</li>
+                                <li>Safety & reliability most critical.</li>
+                            </ul>
+                            <div class="text-xs text-center pt-2 mt-auto"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col items-center">
+                    <div class="bg-green-600 text-white p-3 rounded-xl shadow-md w-64 text-center text-lg font-semibold">
+                        DISCRETE
+                    </div>
+
+                    <div class="bg-pink-600 text-white p-3 mt-4 rounded-xl shadow-md w-64 text-center text-base">
+                        Textiles, Automobiles, FMCG, Commercial
+                    </div>
+
+                    <div class="flex mt-8 w-full justify-center gap-4">
+                        <div class="w-1/2 p-4 bg-green-50 border border-green-200 rounded-xl shadow-inner">
+                            <h3 class="text-sm font-bold text-green-800 mb-3 text-center border-b pb-2">MAJOR DESIGN DISCIPLINES IN DISCRETE MANUFACTURING INDUSTRY
+</h3>
+                            <ul class="space-y-2">
+                                <li class="bg-green-500 text-white p-2 rounded text-sm text-center">Mechanical</li>
+                                <li class="bg-green-500 text-white p-2 rounded text-sm text-center">E&I (Min.)</li>
+                                <li class="bg-green-500 text-white p-2 rounded text-sm text-center">Fire Fighting & Safety</li>
+                                <li class="bg-green-500 text-white p-2 rounded text-sm text-center">Civil</li>
+                            </ul>
+                        </div>
+
+                        <div class="w-1/2 p-4 bg-teal-500 text-white border border-teal-600 rounded-xl shadow-lg flex flex-col justify-between">
+                            <h3 class="text-sm font-bold mb-3 text-center border-b border-teal-300 pb-2">KEY CHARACTERISTICS</h3>
+                            <ul class="list-disc list-inside space-y-2 text-sm">
+                                <li>Decentralized control. Machine/Sub assembly wise control
+</li>
+                                <li>Degree of automation varies as production flow happens across various lines/assembly points
+</li>
+                            </ul>
+                            <div class="text-xs text-center pt-2 mt-auto"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+ <!-- Slide 3: ELECTRICAL IS AT THE CORE OF OPERATIONAL RELIABILITY & SAFETY IN PROCESS INDUSTRY -->
+        <section id="slide-3" class="slide">
+              <div class="slide-content-wrapper">
+        
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-bottom: 80px;">  
+
+            <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+				     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">ELECTRICAL IS AT THE CORE OF OPERATIONAL RELIABILITY & SAFETY IN PROCESS INDUSTRY
+</h3>
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="images/picture1.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+
+
+            </div>
+			
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+				     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">STAGES OF ELECTRICAL SYSTEM DESIGN</h3>
+
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="images/picture2.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+            </div>
+        </div>
+    </div>
+        </section>
+
+        <!-- Slide 3: TYPICAL COMPONENTS OF LOAD LIST -->
+       <section id="technical-soft-skills" class="slide">
+                    <div class="slide-content-wrapper">
+        
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-bottom: 80px;">  
+
+            <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+				     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">TYPICAL COMPONENTS OF LOAD LIST
+</h3>
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="images/picture3.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+
+
+            </div>
+			
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+				     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">Power Demand Calculation</h3>
+
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+               <p style="color: black;">
+			   Each local load may be classified into several different categories for example, vital, Emergency and Normal.<br>
+<br>
+All of the vital, essential and non-essential loads can be divided into typically three duty categories:<br>
+- Continuous operating (C)<br>
+- Intermittent operating (I)<br>
+- Standby (S)<br><br>
+The total amount power demand OF the project shall be the sum of C, I and S with suitable demand factor .
+ The demand factor for continuous shall be 1 and for Intermittent shall be 0.30 and for standby shall be 0.10.
+ The factors should be chosen in such a manner that the selection of Transformers/ generators and main feeders from a power utility company are
+ not excessively rated, thereby leading to more equipment cost and poor operating efficiency.<br><br>
+Each of these totals will consist of the active power and the corresponding reactive power.
+Apparent power will be calculated from the active and reactive power component.<br>
+<br>
+Once the maximum demand is calculated using the appropriate factors for C, I and S loads , the following margins 
+to apply to get the Design capacity of power system<br>
+- Design margin of 10 %<br>
+- Spare future capacity of 10%<br>
+<br>
+Hence for a total demand of 1000KVA , 100 KVA as design margin and 100 KVA as spare capacity the design capacity as 1200 KVA.<br>
+
+			   </p>
+            </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+        <!-- Slide 4: MAJOR FACTORS CONSIDERING WHILE DESIGN ELECTRICAL DISTRIBUTION SCHEME-->
+		 <section id="slide-4" class="slide">
+       
+          <div class="slide-content-wrapper">
+        
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-bottom: 80px;">  
+		
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+				     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">MAJOR FACTORS CONSIDERING WHILE DESIGN ELECTRICAL DISTRIBUTION SCHEME</h3>
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+               <p style="color: black;">
+			 1) Safety<br>
+2) Regulatory requirements<br>
+3) Least initial cost<br>
+4) Maximum reliability<br>
+5) Maximum flexibility and expandability<br>
+6) Minimum operating cost<br>
+7) Minimum maintenance cost<br>
+8) Maximum power quality<br>
+
+			   </p>
+            </div>
+            </div>
+			
+			
+            <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+				     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">BASIC ELECTRICAL DISTRIBUTION – KEY SLD
+</h3>
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="images/Picture4.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+
+
+            </div>
+	
+        </div>
+    </div>
+</section>
+		
+		 <!-- Slide 6: BASIC ELECTRICAL DISTRIBUTION-->
+<section id="slide-5" class="slide">
+   
+          <div class="slide-content-wrapper">
+        
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-bottom: 80px;">  
+		
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+				     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">BASIC ELECTRICAL DISTRIBUTION</h3>
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+               <p style="color: black;">
+			 Mainly 3 types of power distribution scheme – 0% redundant , 50 % redundant and 100% redundant . 100% redundant system is most preferable distribution scheme for industrial plant which requires high reliability. Two(2) 100% rated system will work at 50% loading during normal operation
+<br><br>
+ KEY POINTS :
+<br>
+1) Basic Electrical Distribution is developed based on the Electrical Distribution philosophy defined in the scope( defining power boundary ) or electrical 	design basis document ( voltage levels to be maintained depending on power magnitude)
+<br>
+2) Key SLD or Overall SLD is developed indicating the entire power distribution of the plant along with the Substations and locations of each substation 	and panels. This is overall power plan.
+<br>
+3) Area wise SLD will be developed after the Equipment Sizing( defining individual S/S transformer sizing and no. of feeders necessary to cater that 	area load)
+<br>
+4) Key SLD or Overall SLD is developed indicating the :
+<br>
+- Power tapping arrangement from Plant Incomer<br>
+- Protection & Metering requirements for distribution system<br>
+- Number of Incomers in a switchboard bus and redundancy<br>
+- Power distribution at HV side and LV side<br>
+- HV & LV Voltage levels<br>
+- Bus bar material ( Al or Cu. Can be kept open for vendor to choose even based on current rating) and Short circuit withstand capacities & 	withstand times are indicated based on Design Philosophy document or Design Basis document (System studies will help validate and design the 	final Short circuit withstand ratings & times).<br>
+- Type of protection & starters to be considered for Motor Feeders (Both LV & HV level)<br>
+- Type of protection to be considered for Power Feeders (Both LV & HV level)<br>
+- Bus Arrangement ( single/split/double bus ) & Interlocks philosophy between buses( upstream /downstream or between bus sections)<br>
+- Emergency Power distribution philosophy<br>
+- Power Factor Compensation requirement<br>
+<br>
+
+			   </p>
+            </div>
+            </div>
+			
+			
+            <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+				
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="images/picture5.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+
+
+            </div>
+	
+        </div>
+    </div>
+        </section>
+
+
+        <!-- Slide 9:DETAILED ELECTRICAL DISTRIBUTION -->
+        <section id="slide-8" class="slide">
+           <div class="slide-content-wrapper">
+        
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-bottom: 80px;">  
+
+            <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+				     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">DETAILED ELECTRICAL DISTRIBUTION
+</h3>
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="images/Picture6.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+			<br>
+               <p style="color: white;">
+			  KEY DIFFERENCE BETWEEN BASIC & DETAILED SLD IS :
+<br>
+- Ratings of all equipment such as Motors, Lighting Loads, Compressor loads etc., are clearly mentioned<br>
+- Ratings of all Protection & Metering Equipment are mentioned<br>
+- Type of Protection required for Incomer, Power feeder, Motor feeder are clearly mentioned<br>
+
+			   </p>
+
+            </div>
+			
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+				     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">DETAILED ELECTRICAL DISTRIBUTION
+</h3>
+
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="images/Picture7.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+            </div>
+            </div>
+        </div>
+    </div>
+        </section>
+
+ <!-- Slide 10:Automatic Bus Transfer and Momentary paralleling scheme with 2 Incomer and 1 Bus Coupler switchgear-->
+        <section id="slide-9" class="slide">
+		                    <div class="slide-content-wrapper">
+        
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-bottom: 80px;">  
+
+            <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+				     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">Automatic Bus Transfer and Momentary paralleling scheme with 2 Incomer and 1 Bus Coupler switchgear
+
+</h3>
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="images/Picture8.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+			<br>
+
+
+            </div>
+			
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+		
+                <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                               <p style="color: black;">
+			 All the switchboards with sectionalised buses will be normally operated with the bus coupler breakers in open condition. Auto / Manual / Independent changeover between the two normal incomers and their bus-coupler will be provided with the following features through appropriate selector switch.
+
+<br><br>
+<strong>Auto Mode</strong>
+<br>
+For prolonged under voltage (due to tripping of primary side) on any one of the bus sections, the respective incoming breaker will trip and the bus coupler breaker will close provided the other bus section is healthy and bus coupler is selected for auto changeover. Total changeover time will be adjustable between 1 to 5 seconds. This auto changeover will be blocked if the incoming breaker had tripped on fault (on the load side). In case bus coupler trips on auto closing, no further closing shall be permitted till the system is reset. Changeover back to the normal source of supply will be affected manually.
+<br><br>
+<strong>Manual Mode</strong>
+<br>
+Manual live changeover facility will be provided for the switchboard.
+<br><br>
+For planned outage of one of the normal incoming supplies, the respective selected incomer will be tripped automatically after the bus section breaker is closed manually.
+<br><br>
+Also for restoration of normal power supply, the bus coupler will trip after the respective incoming breaker is closed.
+<br><br>
+For this purpose, a trip selector shall be provided for selecting the breaker to be tripped and momentary paralleling shall be done after phase comparison of both the power supplies through check synchronization relay.
+<br><br>
+Thus, depending on the selection made, the selected breaker will be tripped once all the three breakers are closed manually, thus maintaining continuity of supply for the complete switchboard. A timer with a time delay on pick up of 0.5 - 5 sec. for annunciation of the running breaker failing to trip within a pre-set time, (i.e. If the two sources remain paralleled for more than a pre-set time) will be provided.
+
+			   </p>
+            </div>
+			
+            </div>
+        </div>
+    </div>
+        </section>
+		
+		<!-- Slide 11: EQUIPMENT SPECIFICATIONS -->
+        <section id="slide-10" class="slide">
+		    <h2 class="text-3xl font-bold text-slate-800 mb-2 slide-header">EQUIPMENT SPECIFICATIONS</h2>
+    <div class="slide-content-wrapper">
+	                <div class="bg-white p-8 rounded-xl shadow-lg border border-slate-200">                    
+
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-top: 40px;">  
+
+            <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="images/picture9.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+
+
+            </div>
+			
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="images/picture10.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+            </div>
+        </div>
+		 </div>	    
+    </div>
+        </section>
+		
+				<!-- Slide 11: EQUIPMENT SPECIFICATIONS -->
+        <section id="slide-10" class="slide">
+		    <h2 class="text-3xl font-bold text-slate-800 mb-2 slide-header">EQUIPMENT SPECIFICATIONS</h2>
+    <div class="slide-content-wrapper">
+	                <div class="bg-white p-8 rounded-xl shadow-lg border border-slate-200">                    
+
+
+		<div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-top: 40px;">  
+
+            <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="images/picture11.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+
+
+            </div>
+			
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="images/picture12.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+            </div>
+        </div>
+		<div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-top: 40px;">  
+
+            <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="images/picture13.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+
+
+            </div>
+		
+        </div>
+		 </div>	    
+    </div>
+        </section>
+		
+		<!-- Slide 12: EQUIPMENT SPECIFICATIONS  -->
+        <section id="slide-11" class="slide">
+					  
+          <div class="slide-content-wrapper">
+        
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-bottom: 80px;">  
+		
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+				     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">LIST OF ELECTRICAL EQUIPMENT IN PROJECTS</h3>
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+               <p style="color: black;">
+			<strong>ELECTRICAL EQUIPMENT/MATERIALS IN ANY PROJECTS :<br>			</strong>
+a) Transformers<br>
+b) Switchgears(PCC) and Controlgears (MCC), Busduct<br>
+c) AC UPS<br>
+d) DC UPS (battery and battery charger)<br>
+e) DG Set<br>
+f) Distribution boards<br>
+g) Push button station( local control station)<br>
+h) Motors<br>
+i) Cables ( Power & Control)<br>
+j) Light fittings<br>
+k) Earthing materials<br>
+l) Cable tray<br>
+<br>
+			<strong>ELECTRICAL EQUIPMENT IN SOME PROJECTS :<br>			</strong>
+a) Variable speed drives<br>
+b) Soft starters<br>
+c) Heaters<br>
+d) Neutral Grounding Resistor (NGR)<br>
+e) Capacitor<br>
+<br>
+			<strong>SPECIAL SYSTEMS :<br>			</strong>
+a) Cathodic protection<br>
+b) Electrical heat tracing<br>
+
+
+			   </p>
+            </div>
+            </div>
+			
+			
+            <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+								     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">TRANSFORMER</h3>
+
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="images/picture14.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+
+
+            </div>
+	
+        </div>
+    </div>
+        </section>
+		
+		 <!-- Slide 13: Transformer Impedance-->
+<section id="slide-12" class="slide">
+    <div class="slide-content-wrapper">
+	                <div class="bg-white p-8 rounded-xl shadow-lg border border-slate-200">                    
+
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-top: 40px;">  
+<div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="images/picture15.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+
+
+            </div>
+			
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="images/picture16.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+            </div>
+        </div>
+		 </div>	    
+    </div>
+        </section>
+		
+		 <!-- Slide 13: Transformer Impedance-->
+<section id="slide-12" class="slide">
+    <div class="slide-content-wrapper">
+	                <div class="bg-white p-8 rounded-xl shadow-lg border border-slate-200">                    
+		<div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-top: 40px;">  
+
+            <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="images/picture17.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+
+
+            </div>
+			
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="images/picture18.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+            </div>
+        </div>
+		 </div>	    
+    </div>
+        </section>
+		
+		<!-- Slide 14: DC BATTERY AND BATTERY CHARGER (DC UPS) -->
+      <section id="slide-14" class="slide">
+	     		  <div class="slide-content-wrapper">
+        
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-bottom: 80px;">  
+		
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+				     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">DC BATTERY AND BATTERY CHARGER (DC UPS)</h3>
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+               <p style="color: black;">
+		<strong>Purpose of Battery and battery Charger</strong>
+
+<br><br>
+ The batteries are using for the control and protection of switchgears ( closing and tripping coils, spring charging motor, relays, indicating lamps) , DC lightings and any other DC application likes motors , solenoids etc. Battery chargers are using for charging the batteries and powering the DC loads during normal power supply
+
+<br><br>
+<strong> Battery :<br></strong>
+Reference Standard for sizing the battery capacity : IEEE 1115 for Nickel Cadmium Batteries and IEEE 485 for Lead Acid Batteries . The nominal voltage is NICD cell is 1.2 V and that Lead Acid is 2 V
+<br>
+<br>
+<strong> Basic Terminologies :<br></strong>
+1- Duty Cycle : The duty cycle of a battery is defined as the load currents that a battery is expected to supply for specified periods of time.
+<br>
+2- End Cell Voltage : Cell Voltage allowed to fall before affecting the load. For Lead Acid Batteries it is 1.75V and for Nickel Cadmium it is 1.1 V.
+<br>
+3- Ampere Hour (AH) : The capacity of a secondary storage battery is usually expressed in amperes and time. For example, a battery capacity can be expressed as 42.5A for eight hours or 340 ampere-hours (Ah) at the eight hour rate ( However, the electrolyte temperature and final cell voltage also affects the AH rating of the battery.)
+<br>
+4- 	Capacity rating factor (Kt) : The capacity rating factor, Kt, is the ratio of rated ampere-hour capacity (at a standard time rate, at 25 °C, and to a standard end-of-discharge voltage) of a cell, to the amperes that can be supplied by that cell for t minutes at 25 °C and to a given end-of-discharge voltage.
+<br>
+<br>
+ <strong>Additional Criteria for Cell Sizing :</strong><br>
+5- 	Temperature Correction Factor : The available capacity of a cell is affected by its operating temperature. The standard temperature for stating cell capacity is 25 °C. If the lowest expected electrolyte temperature is below standard, select a cell large enough to have the required capacity available at the lowest expected temperature. The battery manufacturer should be consulted for capacity derating factors for various discharge times and temperatures.
+<br>
+6- 	Design Margin : Required because of unforeseen additions to the dc system and less-than-optimum operating conditions of the battery due to improper maintenance, recent discharge, ambient temperatures lower than anticipated, or a combination of these factors. Design Margin is mentioned in Datasheet or Technical Specification, otherwise 10% is generally considered
+<br>
+
+
+			   </p>
+            </div>
+            </div>
+			
+			
+      <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+				     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">AC UPS</h3>
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+               <p style="color: black;">
+		<strong>Purpose :</strong>
+
+<br>
+- A UPS system is designed to provide a continuous, transient free supply of electrical power to critical loads to protect these loads from outages, surges, or dips in the normal AC power that is supplied from the utility or from an engine generator
+<br>
+- The output power that is provided by a UPS system is AC power, which is one of the key differences between UPS systems and DC systems
+
+<br><br>
+<strong> Main Components :<br></strong>
+<strong>- Rectifier : </strong>The Rectifier is a device that receives AC input power from the AC power source and that converts (rectifies) this AC input to a regulated DC output. The regulated DC output power is used for the following purposes:
+<br>
+a) To supply power to the inverter during normal system operation.<br>
+b) To maintain a float-charge on the UPS battery during normal system operation.<br>
+c) To recharge the UPS battery after a loss and the subsequent return of the normal AC power source.<br>
+
+<br>
+<strong>- Battery :</strong> The function of the battery is to convert electrical energy into chemical energy during the charge cycle and to convert the stored chemical energy into electrical energy during the discharge cycle. After a loss of the normal AC power source, the battery will convert its stored chemical energy into electrical energy to supply the invertefr the required DC input so that the inverter can continue to supply the critical AC loads.
+<br><br>
+<strong>- Inverter : </strong>The function of the inverter of the UPS system is to convert the DC input from the battery charger or the battery to an AC sinewave output of the correct voltage and frequency to supply the critical AC loads.
+<br><br>
+<strong>- Static Switch :</strong> The function of the static switch is to automatically connect the critical AC loads to the output of the inverter during normal operation and, if the inverter output becomes unsatisfactory, to automatically transfer the critical AC loads from the inverter output to the bypass source.
+<br><br>
+<strong>- Bypass Source : </strong>The function of the bypass source is to provide an alternate source of AC power to the critical loads under the following conditions:
+<br>
+a) The inverter malfunctions and is unable to supply an output.<br>
+b) The current demand of the critical AC loads exceeds the capabilities of the inverter. Load in rush currents and faults are the typical causes of high current demands.
+<br>
+<br>
+<strong>- Manual Bypass switch : </strong>The function of the manual bypass switch is to provide a means to manually transfer the critical AC loads from the inverter to the bypass source. This switch is normally used to keep the critical AC loads energized while maintenance is being performed on the inverter.
+
+
+
+			   </p>
+            </div>
+            </div>
+	
+        </div>
+    </div>
+        </section>
+		
+	<!-- Slide 15: AC UPS -->
+      <section id="slide-14" class="slide">
+	     		  <div class="slide-content-wrapper">
+        
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-bottom: 80px;">  
+		
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+				     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">AC UPS</h3>
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+               <p style="color: black;">
+		<strong>Types of UPS :</strong>
+
+<br><br>
+UPS systems are available with a variety of configurations and transfer schemes to meet the needs of each particular installation. The configuration of a UPS system is directly related to reliability and relative cost. Broadly it has been classified in to two types :
+<br>
+- Non-Redundant<br>
+- Redundant
+
+<br><br>
+<strong> Non-Redundant UPS :<br></strong>
+*** Simplest and least expensive<br>
+*** Least Reliable due to single path for power flow
+<br>
+<br>
+<strong> Redundant UPS with Bypass :<br></strong>
+1- Parallel redundant and Hot standby system More reliable compared to Non Redundant without Bypass system due to addition of static switch and bypass source.
+
+<br>
+2- Static switch will transfer the critical AC loads to bypass source if the inverter output fails.
+
+<br>
+3- Costly compared to Non Redundant
+
+<br>
+4- The battery system can be 1x 100% or 2 x50 % .
+<br>
+5- In parallel redundant both UPS share load 50% and in hot stand by stand one system carries 100% load and other is work as standby
+
+<br><br>
+ <strong>Operating Modes :</strong><br>
+  <strong>- Normal Mode<br> </strong>
+1- AC load shall be continuously supplied by the UPS inverter.<br>
+2- Rectifier/charger shall derive power from a primary AC source and supply DC power to the inverter while simultaneously float-charging the battery.
+<br>
+3- Alternate power source will be energized.<br>
+
+<br>
+
+
+			   </p>
+            </div>
+            </div>
+			
+			
+      <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+               <p style="color: black;">
+			    <strong>- Backup Mode<br> </strong>
+1- If failure of the primary AC power source occurs, the AC load shall continue to be supplied by the inverter, which shall obtain power from the battery source without any switching.
+<br>
+2- Power to the load shall not be interrupted upon failure or restoration of the primary AC power source.
+<br>
+3- After battery has discharged to minimum allowable voltage, the UPS shall transfer to the alternate AC power source if alternate source is available.
+
+<br>
+<br>
+		<strong>Recharge Mode :</strong>
+<br>
+1- Upon restoration of primary AC power source, the rectifier/charger shall recharge the batteries and shall simultaneously supply DC power to the inverter.
+<br>
+2- Recharge shall be an automatic function and shall not cause interruption to the load.
+
+<br><br>
+<strong> Bypass Mode :<br></strong>
+1- During an inverter malfunction, overcurrent condition, undervoltage or overvoltage condition, or load fault at the inverter output, the static switch shall automatically transfer the load to alternate AC power source with less than a 1/4-cycle break.
+<br>
+2- Upon clearing an inverter malfunction or fault condition, the static transfer switch shall automatically transfer the load from the alternate AC power source back to the inverter output, unless manual re-transfer mode has been selected. The re-transfer shall be without interruption (zero-break).
+
+			   </p>
+            </div>
+            </div>
+	
+        </div>
+    </div>
+        </section>
+			
+				 <!-- Slide 16: CABLES SIZING & SPECIFICATION-->
+<section id="slide-12" class="slide">
+    <div class="slide-content-wrapper">
+	                <div class="bg-white p-8 rounded-xl shadow-lg border border-slate-200">                    
+
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-top: 40px;">  
+
+            <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="images/picture19.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+
+
+            </div>
+			
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="images/picture20.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+            </div>
+        </div>
+
+		 </div>	    
+    </div>
+        </section>
+
+			 <!-- Slide 16: CABLES SIZING & SPECIFICATION-->
+<section id="slide-12" class="slide">
+    <div class="slide-content-wrapper">
+	                <div class="bg-white p-8 rounded-xl shadow-lg border border-slate-200">                    
+
+		<div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-top: 40px;">  
+
+            <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="images/picture21.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+
+
+            </div>
+			
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="images/picture22.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+            </div>
+        </div>
+		 </div>	    
+    </div>
+        </section>
+		
+						 <!-- Slide 16: CABLES SIZING & SPECIFICATION-->
+<section id="slide-12" class="slide">
+    <div class="slide-content-wrapper">
+	                <div class="bg-white p-8 rounded-xl shadow-lg border border-slate-200">                    
+
+		<div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-top: 40px;">  
+
+            <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="images/picture23.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+            </div>
+		   <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+               <p style="color: black;">
+Metal-enclosed power switchgear: A switchgear assembly completely enclosed on all sides and top with sheet metal containing primary power circuit switching or interrupting devices, or both with buses ,connections, control and auxiliary devices. Access to the interior of the enclosure is provided by doors or removable covers, or both.
+
+<br>
+<br>
+		Metal-clad switchgear requires that the main switching and interrupting device be drawout. Circuit breakers are always electrically operated. Extensive barrier, shutters over the primary circuit elements when the interrupter is withdrawn, and insulation-covered bus are all required.
+
+<br><br>
+Insulators are mainly SMC (Sheet Moulding Compound)suitable up to 80KA and DMC (Dough Moulding Compound)Suitable up to 25KA
+<br><br>
+The specification shall indicate the devices(CB, MCCB, Contactors, relays, meters) specific requirement, busbar, fabrication details, instrument transformer, control and metering requirements, auxiliary busbar and earth busbar details, control wiring, incoming and outgoing connection details, control switches and indicating lamps specifics, painting and testing requirements .
+
+			   </p>
+            </div>
+            </div>
+        </div>
+		 </div>	    
+    </div>
+        </section>
+				 <!-- Slide 17: NEMA Enclosure Type-->
+<section id="slide-12" class="slide">
+    <div class="slide-content-wrapper">
+	                <div class="bg-white p-8 rounded-xl shadow-lg border border-slate-200">                    
+
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-top: 40px;">  
+
+            <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="images/picture24.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+
+
+            </div>
+			
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="images/picture25.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+            </div>
+        </div>
+		
+		 </div>	    
+    </div>
+        </section>
+
+				 <!-- Slide 17: NEMA Enclosure Type-->
+<section id="slide-12" class="slide">
+    <div class="slide-content-wrapper">
+	                <div class="bg-white p-8 rounded-xl shadow-lg border border-slate-200">                    
+
+		<div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-top: 40px;">  
+
+            <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="images/picture26.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+
+
+            </div>
+			
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="images/picture27.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+            </div>
+        </div>
+		<div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-top: 40px;">  
+
+            <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="images/picture28.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+            </div>
+		  
+        </div>
+		 </div>	    
+    </div>
+        </section>
+		
+	 <!-- Slide 18: BUS DUCT-->
+<section id="slide-12" class="slide">
+    <div class="slide-content-wrapper">
+	                <div class="bg-white p-8 rounded-xl shadow-lg border border-slate-200">                    
+
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-top: 40px;">  
+
+            <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="images/picture29.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+
+
+            </div>
+			
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="images/picture30.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+            </div>
+        </div>
+		<div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-top: 40px;">  
+
+            <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="images/picture31.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+
+
+            </div>
+
+        </div>
+		 </div>	    
+    </div>
+        </section>
+
+	 <!-- Slide 19: LAYOUT ENGINEERING AND CALCULATIONS-->
+<section id="slide-12" class="slide">
+    <div class="slide-content-wrapper">
+	                <div class="bg-white p-8 rounded-xl shadow-lg border border-slate-200">                    
+     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">LAYOUT ENGINEERING AND CALCULATIONS
+
+</h3>
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-top: 40px;">  
+
+            <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="images/picture32.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+
+
+            </div>
+			
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="images/picture33.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+            </div>
+        </div>
+		 </div>	    
+    </div>
+        </section>
+
+<!-- Slide 191: LAYOUT ENGINEERING AND CALCULATIONS-->
+<section id="slide-12" class="slide">
+    <div class="slide-content-wrapper">
+	                <div class="bg-white p-8 rounded-xl shadow-lg border border-slate-200">                    
+     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">LAYOUT ENGINEERING AND CALCULATIONS
+
+</h3>
+		<div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-top: 40px;">  
+
+            <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="images/picture34.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+
+
+            </div>
+  <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="images/picture35.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+
+
+            </div>
+        </div>
+		 </div>	    
+    </div>
+        </section>
+		
+	 <!-- Slide 20: LAYOUT ENGINEERING AND CALCULATIONS-->
+<section id="slide-12" class="slide">
+    <div class="slide-content-wrapper">
+	                <div class="bg-white p-8 rounded-xl shadow-lg border border-slate-200">                    
+     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">LAYOUT ENGINEERING AND CALCULATIONS
+
+</h3>
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-top: 40px;">  
+
+            <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="images/picture36.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+
+
+            </div>
+			
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="images/picture37.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+            </div>
+        </div>
+		 </div>	    
+    </div>
+        </section>
+
+<!-- Slide 201: LAYOUT ENGINEERING AND CALCULATIONS-->
+<section id="slide-12" class="slide">
+    <div class="slide-content-wrapper">
+	                <div class="bg-white p-8 rounded-xl shadow-lg border border-slate-200">                    
+     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">LAYOUT ENGINEERING AND CALCULATIONS
+
+</h3>
+		<div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-top: 40px;">  
+
+            <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="images/picture38.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+
+
+            </div>
+  <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="images/picture39.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+
+
+            </div>
+        </div>
+			<div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-top: 40px;">  
+
+            <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="images/picture40.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+
+
+            </div>
+        </div>
+		 </div>	    
+    </div>
+        </section>
+		
+	 <!-- Slide 21: LIGHITNG CALCULATIONS AND LAYOUT-->
+<section id="slide-12" class="slide">
+    <div class="slide-content-wrapper">
+	                <div class="bg-white p-8 rounded-xl shadow-lg border border-slate-200">                    
+     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">LIGHITNG CALCULATIONS AND LAYOUT
+
+
+</h3>
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-top: 40px;">  
+
+            <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="images/picture41.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+
+
+            </div>
+			
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="images/picture42.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+            </div>
+        </div>
+		 </div>	    
+    </div>
+        </section>
+
+	 <!-- Slide 211: LIGHITNG CALCULATIONS AND LAYOUT-->
+<section id="slide-12" class="slide">
+    <div class="slide-content-wrapper">
+	                <div class="bg-white p-8 rounded-xl shadow-lg border border-slate-200">                    
+     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">LIGHITNG CALCULATIONS AND LAYOUT
+
+
+</h3>
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-top: 40px;">  
+
+            <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="images/picture43.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+
+
+            </div>
+			
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="images/picture44.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+            </div>
+        </div>
+		 </div>	    
+    </div>
+        </section>
+
+	 <!-- Slide 212: LIGHITNG CALCULATIONS AND LAYOUT-->
+<section id="slide-12" class="slide">
+    <div class="slide-content-wrapper">
+	                <div class="bg-white p-8 rounded-xl shadow-lg border border-slate-200">                    
+     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">LIGHITNG CALCULATIONS AND LAYOUT
+
+
+</h3>
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-top: 40px;">  
+
+            <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="images/picture45.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+
+
+            </div>
+			
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="images/picture46.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+            </div>
+        </div>
+		 </div>	    
+    </div>
+        </section>
+
+	 <!-- Slide 213: LIGHITNG CALCULATIONS AND LAYOUT-->
+<section id="slide-12" class="slide">
+    <div class="slide-content-wrapper">
+	                <div class="bg-white p-8 rounded-xl shadow-lg border border-slate-200">                    
+     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">LIGHITNG CALCULATIONS AND LAYOUT
+
+
+</h3>
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-top: 40px;">  
+
+            <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="images/picture47.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+
+
+            </div>
+			
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="images/picture48.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+            </div>
+        </div>
+		        <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-top: 40px;">  
+
+            <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="images/picture49.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+
+
+            </div>
+
+        </div>
+		 </div>	    
+    </div>
+        </section>
+
+
+
+<!-- Slide 59: Conclusion -->
+        <section id="slide-58" class="slide flex flex-col justify-center items-center text-center p-4">
+             <div class="bg-white p-10 md:p-16 rounded-2xl shadow-xl max-w-4xl w-full">
+                <div class="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-4xl mx-auto mb-6">✓</div>
+                <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-6">Course Complete</h1>
+                <p class="text-xl text-slate-600 mb-8 max-w-2xl mx-auto">Thank You</p>
+                <button onclick="location.reload()" class="bg-slate-800 hover:bg-slate-900 text-white font-bold py-3 px-8 rounded-full shadow-lg">
+                    Restart Course
+                </button>
+            </div>
+        </section>
+		
+		
+   </main>
+
+    <!-- Footer: Nav -->
+       <footer class="bg-white shadow-inner p-4 z-10 flex-shrink-0 border-t border-slate-200">
+    <div class="max-w-6xl mx-auto flex justify-between items-center">
+        <button id="prev-btn" class="bg-white border border-slate-300 text-slate-700 font-bold py-2 px-6 rounded-lg shadow-sm hover:bg-slate-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+            Previous
+        </button>
+        <div class="flex-1 mx-4">
+            <div class="w-full bg-slate-200 rounded-full h-2.5 overflow-hidden">
+                <div id="progress-bar" class="bg-blue-600 h-2.5 rounded-full transition-all duration-300 ease-out" style="width: 0%;"></div> 
+            </div>
+        </div>
+        <button id="next-btn" class="bg-blue-800 text-white font-bold py-2 px-6 rounded-lg shadow hover:bg-blue-900 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+            Next
+        </button>
+    </div>
+</footer>
+
+  <!-- Zoom Overlay -->
+<div id="zoomOverlay"
+     class="hidden fixed inset-0 bg-black/80 flex items-center justify-center overflow-hidden z-50">
+    <img id="zoomedImage"
+         class="max-w-[90%] max-h-[90%] rounded-lg transition-transform cursor-zoom-out"
+         src="">
+</div>
+
+   <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        let currentSlideIndex = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        const prevButton = document.getElementById('prev-btn');
+        const nextButton = document.getElementById('next-btn');
+        const slideCounter = document.getElementById('slide-counter');
+        const progressBar = document.getElementById('progress-bar');
+        
+        // ** إضافة متغير حالة البدء وربط زر Start **
+        let isStarted = false; 
+        const startButton = document.getElementById('start-btn'); // يجب أن يكون هذا الـ ID موجوداً في HTML الشريحة 0
+        // ... (بقية المتغيرات)
+
+        const videoModal = document.getElementById('video-modal');
+        const videoModalContent = document.getElementById('video-modal-content');
+        const youtubeIframe = document.getElementById('youtube-iframe');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+        const playVideoBtns = document.querySelectorAll('.play-video-btn');
+
+        function showSlide(index) {
+            if (index < 0 || index >= totalSlides) return;
+            
+            slides[currentSlideIndex].classList.remove('slide-visible');
+            slides[currentSlideIndex].classList.add('slide-hidden');
+            
+            slides[index].classList.remove('slide-hidden');
+            slides[index].classList.add('slide-visible');
+            
+            currentSlideIndex = index;
+            updateNavigation();
+            
+            // Scroll top content
+            const content = slides[index].querySelector('.slide-content-wrapper');
+            if (content) content.scrollTop = 0;
+        }
+
+        function updateNavigation() {
+            slideCounter.textContent = `Slide ${currentSlideIndex + 1} / ${totalSlides}`;
+            const progressPercentage = ((currentSlideIndex + 1) / totalSlides) * 100;
+            progressBar.style.width = `${progressPercentage}%`;
+            
+            prevButton.disabled = (currentSlideIndex === 0);
+            
+            // ** المنطق المُعدّل لزر Next **
+            // يتم التعطيل فقط إذا: 
+            // 1. كنا في الشريحة الأخيرة.
+            // 2. أو كنا في الشريحة 0 ولم نضغط على Start بعد.
+            const shouldBeDisabled = (currentSlideIndex === totalSlides - 1) || 
+                                     (currentSlideIndex === 0 && !isStarted);
+                                     
+            nextButton.disabled = shouldBeDisabled;
+        }
+
+        prevButton.addEventListener('click', () => showSlide(currentSlideIndex - 1));
+        
+        // ** ملاحظة: زر Next سيتفعل تلقائياً بعد الانتقال للشريحة 1 **
+        nextButton.addEventListener('click', () => showSlide(currentSlideIndex + 1));
+
+        // ** مستمع حدث زر Start (التعديل الرئيسي) **
+        if (startButton) {
+            startButton.addEventListener('click', () => {
+                isStarted = true; // تفعيل حالة البدء
+                
+                // الانتقال إلى الشريحة التالية (الشريحة 1)
+                showSlide(currentSlideIndex + 1);
+                
+                // إخفاء زر Start بعد بدء الدورة
+                // إذا لم تكن تريد إخفاءه، احذف السطر التالي
+                startButton.classList.add('hidden'); 
+            });
+        }
+        
+        // ... (بقية أكواد الـ Video Modals والـ Zoom)
+
+        const zoomableImages = document.querySelectorAll(".zoomable");
+        const overlay = document.getElementById("zoomOverlay");
+        const zoomImg = document.getElementById("zoomedImage");
+
+        let scale = 1;
+        let isDragging = false;
+        let startX, startY;
+        let translateX = 0;
+        let translateY = 0;
+
+        zoomableImages.forEach(img => {
+            img.addEventListener("click", () => {
+                zoomImg.src = img.src;
+                scale = 1;
+                translateX = 0;
+                translateY = 0;
+                zoomImg.style.transform = `translate(0px, 0px) scale(1)`;
+                overlay.classList.remove("hidden");
+            });
+        });
+
+        overlay.addEventListener("click", (e) => {
+            if (e.target === overlay) {
+                overlay.classList.add("hidden");
+            }
+        });
+
+        zoomImg.addEventListener("wheel", (e) => {
+            e.preventDefault();
+            scale += e.deltaY < 0 ? 0.1 : -0.1;
+            if (scale < 1) scale = 1;
+            if (scale > 5) scale = 5;
+            zoomImg.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+        });
+
+        zoomImg.addEventListener("mousedown", (e) => {
+            if (scale <= 1) return;
+            isDragging = true;
+            zoomImg.style.cursor = "grabbing";
+            startX = e.clientX - translateX;
+            startY = e.clientY - translateY;
+        });
+
+        zoomImg.addEventListener("mousemove", (e) => {
+            if (!isDragging) return;
+            translateX = e.clientX - startX;
+            translateY = e.clientY - startY;
+            zoomImg.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+        });
+
+        zoomImg.addEventListener("mouseup", () => {
+            isDragging = false;
+            zoomImg.style.cursor = "grab";
+        });
+
+        zoomImg.addEventListener("mouseleave", () => {
+            isDragging = false;
+        });
+        
+        // تهيئة البدء
+        updateNavigation();
+    });
+</script>
+
+</body>
+</html>
